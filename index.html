@@ -1,27 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Blockchain Visualization</title>
-		<style>
-			#cy {
-				width: 100%;
-				height: 600px;
-				border: 1px solid black;
-			}
-			button {
-				margin: 10px;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Blockchain Visualization</h1>
-		<div id="cy"></div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blockchain Visualization</title>
+	<style>
+		#cy {
+			width: 100%;
+			height: 600px;
+			border: 1px solid black;
+		}
+	
+		button {
+			margin: 10px;
+		}
+	
+		/* Modal styles */
+		dialog {
+			border: 2px solid black;
+			padding: 20px;
+			border-radius: 8px;
+		}
+	
+		dialog::backdrop {
+			background-color: rgba(0, 0, 0, 0.3);
+		}
+	
+		.modal-header {
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+	
+		.form-field {
+			display: flex;
+			margin-bottom: 10px;
+		}
+	
+		label {
+			margin-right: 10px;
+			width: 80px;
+		}
+	
+		input {
+			flex-grow: 1;
+		}
+	
+		.modal-buttons {
+			display: flex;
+			justify-content: flex-end;
+			gap: 10px;
+		}
+	</style>
+	
+</head>
+<body>
+    <h1>Blockchain Visualization</h1>
+    
+    <div id="cy"></div>
 
-		<button id="createBlockBtn">Create Block</button>
-		<button id="mineBlockBtn">Mine Block</button>
+    <button id="createTransactionBtn">Create Transaction</button>
+    <button id="mineBlockBtn">Mine Block</button>
 
-		<script src="dist/index.bundle.js"></script>
-	</body>
+    <!-- Transaction Modal -->
+    <dialog id="transactionModal">
+        <div class="modal-header">Create a New Transaction</div>
+        <form id="transactionForm">
+            <div class="form-field">
+                <label for="sender">Sender:</label>
+                <input type="text" id="sender" name="sender" required />
+            </div>
+            <div class="form-field">
+                <label for="receiver">Receiver:</label>
+                <input type="text" id="receiver" name="receiver" required />
+            </div>
+            <div class="form-field">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required />
+            </div>
+            <div class="modal-buttons">
+                <button type="button" id="closeModalBtn">Cancel</button>
+                <button type="submit" id="addTransactionBtn">Add Transaction</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="dist/index.bundle.js"></script>
+
+    <script>
+        const transactionModal = document.getElementById('transactionModal');
+        const createTransactionBtn = document.getElementById('createTransactionBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const transactionForm = document.getElementById('transactionForm');
+
+        // Open the modal when "Create Transaction" is clicked
+        createTransactionBtn.addEventListener('click', () => {
+            transactionModal.showModal();
+        });
+
+        // Close the modal when "Cancel" is clicked
+        closeModalBtn.addEventListener('click', () => {
+            transactionModal.close();
+        });
+    </script>
+</body>
 </html>

@@ -27,17 +27,27 @@ export class Blockchain {
 	private powPrefix = "0";
 
 	constructor(private readonly difficulty: number = 4) {
-		const genesisBlock = {
+		const genesisTransaction: Transaction = {
+			id: crypto.randomUUID(),
+			sender: "Ryan",
+			receiver: "Genesis",
+			amount: 0,
+			timestamp: Date.now(),
+			signature: '',
+		};
+	
+		const genesisBlock: Block = {
 			header: {nonce: 0, blockHash: ""},
 			payload: {
 				blockIndex: 0,
 				timestamp: Date.now(),
-				data: [],
+				data: [genesisTransaction],
 				previousHash: "",
 			},
 		};
+	
 		this.#chain.push(genesisBlock);
-		console.log("Genesis block created!");
+		console.log("Genesis block created with Ryan as the sender!");
 	}
 
 	get chain() {
