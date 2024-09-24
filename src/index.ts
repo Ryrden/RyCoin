@@ -1,22 +1,14 @@
-import {Blockchain, Transaction} from "./blockchain";
+import { BlockchainVisualization } from "./blockchainVisualization";
+import { Blockchain } from './blockchain';
 
-const blockchain = new Blockchain(Number(process.argv[2] || 4));
-const blockNumber = +process.argv[3] || 10;
-let chain = blockchain.chain;
+const difficulty = Number(prompt("Enter the mining difficulty (default: 4):", "4")) || 4;
+const blockchain = new Blockchain(difficulty);
+console.log("Blockchain created:", blockchain);
 
-for (let i = 1; i <= blockNumber; i++) {
-	const sampleTransaction: Transaction[] = [{
-		id: "sampleID",
-		sender: "Someone",
-		receiver: "Someone else",
-		amount: 100,
-		timestamp: Date.now(),
-		signature: "signature",
-	}]
-	const block = blockchain.createBlock(sampleTransaction);
-	const mineInfo = blockchain.mineBlock(block.payload);
-	chain = blockchain.pushBlock(mineInfo.minedBlock);
-}
+const blockchainViz = new BlockchainVisualization(blockchain);
 
-console.log("CHAIN\n");
-console.table(chain);
+document.getElementById('mineBlockBtn')?.addEventListener('click', () => {
+    blockchainViz.mineBlock();
+});
+
+console.log("CHAMA NO BUILD MININO")

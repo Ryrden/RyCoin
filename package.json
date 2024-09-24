@@ -1,16 +1,30 @@
 {
-  "devDependencies": {
-    "@types/node": "^22.5.4",
-    "typescript": "^5.5.4"
-  },
-  "name": "rycoin",
-  "version": "1.0.0",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+	"devDependencies": {
+		"@types/crypto-js": "^4.2.2",
+		"@types/cytoscape": "^3.21.7",
+		"@types/node": "^22.5.4",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.5.4",
+		"webpack": "^5.94.0",
+		"webpack-cli": "^5.1.4",
+		"webpack-dev-server": "^5.1.0"
+	},
+	"name": "rycoin",
+	"version": "1.0.0",
+	"scripts": {
+		"build": "webpack",
+		"dev": "webpack --watch",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"buffer": "^6.0.3",
+		"crypto-browserify": "^3.12.0",
+		"crypto-js": "^4.2.0",
+		"cytoscape": "^3.30.2",
+		"stream-browserify": "^3.0.0"
+	}
 }

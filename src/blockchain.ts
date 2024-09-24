@@ -1,4 +1,4 @@
-import {BinaryLike, createHash} from "crypto";
+import SHA256 from "crypto-js/sha256";
 
 export interface Block {
 	header: {
@@ -37,6 +37,7 @@ export class Blockchain {
 			},
 		};
 		this.#chain.push(genesisBlock);
+		console.log("Genesis block created!");
 	}
 
 	get chain() {
@@ -52,6 +53,7 @@ export class Blockchain {
 	}
 
 	public createBlock(data: Transaction[]): Block {
+		console.log(`Creating block #${this.lastBlock.payload.blockIndex + 1}...`);
 		const payload = {
 			blockIndex: this.lastBlock.payload.blockIndex + 1,
 			timestamp: Date.now(),
@@ -130,9 +132,10 @@ export class Blockchain {
 		return this.#chain;
 	}
 
-	private hash(data: BinaryLike): string {
-		return createHash("sha256").update(data).digest("hex");
-	}
+	private hash(data: string): string {
+		return SHA256(data).toString();
+			}
+	
 
 	private isHashProofed(hash: string): boolean {
 		const prefix = this.powPrefix.repeat(this.difficulty);
