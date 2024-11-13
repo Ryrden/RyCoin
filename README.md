@@ -16,6 +16,7 @@ Antes de executar o projeto, certifique-se de ter as seguintes dependências ins
 - Node.js e npm. Você pode baixar [aqui](https://nodejs.org/).
 - MetaMask como extensão do navegador (para conectar com a blockchain local).
 - Vite para o desenvolvimento do frontend, instalado com: `npm install -g vite`
+- Besu para instanciação da rede blockchain. Você pode baixar [aqui](https://besu.hyperledger.org/private-networks/get-started/install)
 
 ## Como executar o projeto
 
@@ -38,46 +39,52 @@ Siga as etapas abaixo para executar o projeto em sua máquina local:
     npm install
     ```
 
-3. Defina as variáveis de ambiente
+3. Inicie a rede Besu
 
-    No diretório `blockchain`, crie um arquivo `.env` com as seguintes variáveis de ambiente:
+    Abra 3 terminais (Linux ou WSL) No diretório `blockchain/besu-nodes` e para cada pasta, execute os comandos:
 
-    ```bash
-    ALCHEMY_GOERLI_URL="https://eth-goerli.g.alchemy.com/v2/SUA_CHAVE_ALCHEMY"
-    PRIVATE_KEY="SUA_CHAVE_PRIVADA"
-    ```
-
-4. Execute o backend
-
-    No diretório `blockchain`, inicie o nó local do Hardhat para simular uma blockchain Ethereum:
+    Pasta `Node1`:
 
     ```bash
-    npx hardhat node
+    besu --data-path=data --genesis-file=../privateNetworkGenesis.json --miner-enabled --miner-coinbase f17f52151EbEF6C7334FAD080c5704D77216b732 --rpc-http-enabled --host-allowlist="*" --rpc-http-cors-origins="all"
     ```
 
-    Em outro terminal, faça o deploy do contrato `RyCoin` na rede local:
+    Aguarde a iniciacialização deste nó e copie a string `enode` que ele irá expor, ela se parece com isso aqui: `enode://<hash>.0.0.1:30303`
+
+    Para as proximas pastas execute o mesmo comando substituindo o atributo `<Node-1 Enode URL>` pelo enode obtido do Node anterior.
+    Pasta `Node2` e `Node3`:
 
     ```bash
-    npx hardhat run scripts/deploy.ts --network localhost
+    besu --data-path=data --genesis-file=../privateNetworkGenesis.json --bootnodes=<Node-1 Enode URL> --p2p-port=30304 --profile=ENTERPRISE
     ```
 
-5. Copie o ABI para o Frontend
+    Deixe os 3 terminais rodando e siga o tutorial em outro.
 
-    Após o deploy, copie o arquivo `RyCoin.json` com o ABI do contrato para o diretório do frontend:
+    Para mais informações, deste passo a passo, siga o guia da [documentação oficial](https://besu.hyperledger.org/private-networks/tutorials/ethash)
+
+4. Compile o contrato e faça deploy na rede Besu.
+
+    No diretório `blockchain`, execute o comando
 
     ```bash
-    cp blockchain/artifacts/contracts/RyCoin.sol/RyCoin.json frontend/src/abi/RyCoin.json
+    npx hardhat run scripts/deploy.ts --network besu
     ```
 
+    Copie o valor do Contract Address.
+
+5. Cole o contract Address no Frontend e execute-o
+
+    Após o deploy do contrato e obtendo o endereço de contrato, substituia-o na variavel `contractAddress` no arquivo [App.tsx](./frontend/src/App.tsx)
     Esse arquivo será necessário para que o frontend possa interagir com o contrato.
 
-6. Execute o Frontend
+    Dentro do diretorio do frontend, execute o comando `npm run dev`
 
-    No diretório `frontend`, inicie o servidor de desenvolvimento:
+6. Configure o Metamask.
 
-    ```bash
-    npm run dev
-    ```
+    Após execução do frontend, entre na extensão do metamask e crie uma nova rede localhost com o endereço exposto pela rede besu, que no caso, é:
+    `localhost:8545` com chainId de valor `1337`.
+
+    Feito isso, tudo configurado, utilize sua rede descentralizada :)
 
 Abra o navegador e acesse o endereço fornecido pelo Vite para ver o DApp.
 
@@ -89,13 +96,15 @@ A estrutura de pastas do projeto é organizada da seguinte maneira:
 .
 ├── blockchain
 │   ├── artifacts        # Artifacts de contratos compilados (Gerado após compilado)
+│   ├── besu-nodes       # pasta onde estará exposto a rede P2P Besu da Blockchain.
+│   │   ├── Node1
+│   │   ├── Node2
+│   │   └── Node3
 │   ├── contracts        # Contratos Solidity (RyCoin.sol)
 │   ├── scripts          # Scripts de deploy e interações com contratos
-│   ├── .env             # Variáveis de ambiente do backend
 │   └── hardhat.config.ts # Configuração do Hardhat
 └── frontend
     ├── src
-    │   ├── abi          # Arquivo ABI do contrato RyCoin
     │   ├── App.tsx      # Componente raiz do frontend
     │   └── main.tsx     # Ponto de entrada do Vite
     ├── public           # Arquivos públicos, incluindo o index.html
