@@ -5,7 +5,8 @@
 ![Github repo size](https://img.shields.io/github/repo-size/Ryrden/RyCoin)
 ![Github stars](https://img.shields.io/github/stars/Ryrden/RyCoin?style=social)
 
-![Capa do Projeto](https://picsum.photos/1280/720)
+![Capa do Projeto](https://github.com/user-attachments/assets/55173bda-e672-4183-b9ad-62ad1430a16c)
+
 
 > Projeto DApp desenvolvido para implementar e interagir com o token RyCoin, criado em Solidity e integrado ao MetaMask.
 
