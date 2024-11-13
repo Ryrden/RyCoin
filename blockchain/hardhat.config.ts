@@ -1,20 +1,18 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import dotenv from "dotenv";
+  import { HardhatUserConfig } from "hardhat/config";
+  import "@nomicfoundation/hardhat-toolbox";
 
-dotenv.config();
-
-const config: HardhatUserConfig = {
-  solidity: "0.8.27",
-  paths: {
-    artifacts: "./artifacts",
-    cache: "./cache",
-  },
-  networks: {
-    localhost: {
-      url: "http://127.0.0.1:8545",
+  const config: HardhatUserConfig = {
+    solidity: "0.8.27",
+    paths: {
+      artifacts: "./artifacts",
+      cache: "./cache",
     },
-  }
-};
+    networks: {
+      besu: {
+        url: "#",
+        accounts: [`0xae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f`]
+      },
+    }
+  };
 
-export default config;
+  export default config;

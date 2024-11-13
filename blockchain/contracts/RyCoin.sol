@@ -7,4 +7,8 @@ contract RyCoin is ERC20 {
     constructor(uint256 initialSupply) ERC20("RyCoin", "RYC") {
         _mint(msg.sender, initialSupply * (10 ** decimals()));
     }
+    
+    function mint(address to, uint256 amount) public {
+        _mint(to, amount);
+    }
 }
